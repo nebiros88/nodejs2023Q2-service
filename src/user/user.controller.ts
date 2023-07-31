@@ -29,7 +29,7 @@ export class UserController {
       return this.userService.getUserById(id);
     } catch (error) {
       throw new HttpException(
-        REQUEST_ERRORS.NO_USER_WITH_PROVIDED_ID,
+        REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID,
         HttpStatus.NOT_FOUND,
       );
     }
@@ -50,7 +50,7 @@ export class UserController {
       return this.userService.updatePassword(body, id);
     } catch (error) {
       const statusCode: HttpStatus =
-        error.message === REQUEST_ERRORS.NO_USER_WITH_PROVIDED_ID
+        error.message === REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID
           ? HttpStatus.NOT_FOUND
           : HttpStatus.FORBIDDEN;
 

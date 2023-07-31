@@ -29,7 +29,7 @@ export class UserService {
     const isLoginNotUniq = db.user.some((user) => user.login === login);
 
     if (isLoginNotUniq) {
-      throw new Error(REQUEST_ERRORS.USER_EXISTS_LOGIN);
+      throw new Error(REQUEST_ERRORS.USER.USER_EXISTS_LOGIN);
     }
 
     const newUser: User = {
@@ -51,13 +51,13 @@ export class UserService {
     let user = db.user.find((user) => user.id === id);
 
     if (!user) {
-      throw new Error(REQUEST_ERRORS.NO_USER_WITH_PROVIDED_ID);
+      throw new Error(REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID);
     }
 
     const isWrongPassword = user.password !== body.oldPassword;
 
     if (isWrongPassword) {
-      throw new Error(REQUEST_ERRORS.USER_WRONG_PASSWORD);
+      throw new Error(REQUEST_ERRORS.USER.USER_WRONG_PASSWORD);
     }
 
     db.user.map((el) => {
@@ -77,7 +77,7 @@ export class UserService {
     const user = db.user.find((user) => user.id === id);
 
     if (!user) {
-      throw new Error(REQUEST_ERRORS.NO_USER_WITH_PROVIDED_ID);
+      throw new Error(REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID);
     }
 
     db.user = db.user.filter((user) => user.id !== id);
