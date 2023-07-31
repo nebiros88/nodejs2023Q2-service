@@ -15,6 +15,10 @@ export const REQUEST_ERRORS = {
   },
   FAVS: {
     NO_ALBUM_IN_FAVS:
-      'The album with provided id does not incleded in favorites!',
+      'The album with provided id does not included in favorites!',
+    NO_TRACK_IN_FAVS:
+      'The track with provided id does not included in favorites!',
+    NO_ARTIST_IN_FAVS:
+      'The artist with provided id does not included in favorites!',
   },
 };

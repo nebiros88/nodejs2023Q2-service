@@ -73,4 +73,37 @@ export class FavsService {
 
     db.favorites.albums = db.favorites.albums.filter((el) => el !== id);
   }
+
+  deleteTrackFromFavs(id: string) {
+    const track = this.trackService.getTrackById(id);
+
+    if (!track) throw new Error(REQUEST_ERRORS.TRACK.NO_TRACK_BY_ID);
+
+    const isTrackInFavs = db.favorites.tracks.find((el) => (el = id));
+    if (!isTrackInFavs) throw new Error(REQUEST_ERRORS.FAVS.NO_TRACK_IN_FAVS);
+
+    db.favorites.tracks = db.favorites.tracks.filter((el) => el !== id);
+  }
+
+  addFavoriteArtist(id: string) {
+    const artist = this.artistService.getArtistById(id);
+
+    if (!artist) throw new Error(REQUEST_ERRORS.ARTIST.NO_ARTIST_BY_ID);
+
+    db.favorites.artists.push(artist.id);
+
+    return artist;
+  }
+
+  deleteArtistFromFavs(id: string) {
+    const artist = this.artistService.getArtistById(id);
+
+    if (!artist) throw new Error(REQUEST_ERRORS.ARTIST.NO_ARTIST_BY_ID);
+
+    const isArtistInFavs = db.favorites.artists.find((el) => (el = id));
+
+    if (!isArtistInFavs) throw new Error(REQUEST_ERRORS.FAVS.NO_ARTIST_IN_FAVS);
+
+    db.favorites.artists = db.favorites.artists.filter((el) => el !== id);
+  }
 }
