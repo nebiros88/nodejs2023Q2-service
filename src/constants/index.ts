@@ -1,1 +1,1 @@
-export * from './errorMessagges';
+export * from './errors';

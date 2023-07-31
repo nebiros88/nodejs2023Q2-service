@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class ArtistIdDto {
   @IsUUID('4')
@@ -7,6 +7,7 @@ export class ArtistIdDto {
 
 export class ArtistDto {
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   @IsNotEmpty()

@@ -63,6 +63,19 @@ export class ArtistService {
     }
 
     db.artist = db.artist.filter((el) => el.id !== id);
+
+    db.track.map((track, index) => {
+      if (track.artistId === id) {
+        db.track[index].artistId = null;
+      }
+    });
+
+    db.album.map((album, index) => {
+      if (album.artistId === id) {
+        db.album[index].artistId = null;
+      }
+    });
+
     return;
   }
 }

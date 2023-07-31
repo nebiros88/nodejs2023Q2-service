@@ -49,6 +49,7 @@ export class ArtistController {
   @Delete(':id')
   @HttpCode(204)
   deleteArtist(@Param() { id }: ArtistIdDto) {
+    console.log('CONTROLLER -', id);
     try {
       return this.artistService.deleteArtist(id);
     } catch (error) {
