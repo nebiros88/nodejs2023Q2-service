@@ -10,4 +10,7 @@ export const REQUEST_ERRORS = {
   ARTIST: {
     NO_ARTIST_BY_ID: 'The artist with provided id does not exist!',
   },
+  ALBUM: {
+    NO_ALBUM_BY_ID: 'The album with provided id does not exist!',
+  },
 };

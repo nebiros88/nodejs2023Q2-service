@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { ArtistDto, ArtistIdDto } from './dto';
-import { REQUEST_ERRORS } from 'src/constants';
 
 @Controller('artist')
 export class ArtistController {
@@ -49,7 +48,6 @@ export class ArtistController {
   @Delete(':id')
   @HttpCode(204)
   deleteArtist(@Param() { id }: ArtistIdDto) {
-    console.log('CONTROLLER -', id);
     try {
       return this.artistService.deleteArtist(id);
     } catch (error) {

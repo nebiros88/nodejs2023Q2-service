@@ -97,7 +97,7 @@ export const mockedAlbums: Album[] = [
     id: uuidv4(),
     name: 'album-2',
     year: 2021,
-    artistId: mockedArtists[0].id,
+    artistId: mockedArtists[1].id,
   },
 ];
 
