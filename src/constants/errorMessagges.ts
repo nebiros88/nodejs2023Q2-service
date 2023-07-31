@@ -7,4 +7,7 @@ export const REQUEST_ERRORS = {
   TRACK: {
     NO_TRACK_BY_ID: 'The track with provided id does not exist!',
   },
+  ARTIST: {
+    NO_ARTIST_BY_ID: 'The artist with provided id does not exist!',
+  },
 };
