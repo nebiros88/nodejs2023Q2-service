@@ -6,3 +6,11 @@ export interface User {
   createdAt: number; // timestamp of creation
   updatedAt: number; // timestamp of last update
 }
+
+export type UserResponse = {
+  id: string;
+  login: string;
+  version: number;
+  createdAt: number;
+  updatedAt: number;
+};

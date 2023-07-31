@@ -7,7 +7,7 @@ export const mockedUsers: User[] = [
     id: uuidv4(),
     login: 'user1-login',
     password: 'user1-password',
-    version: 0, // integer number, increments on update
+    version: 1, // integer number, increments on update
     createdAt: Date.now(), // timestamp of creation
     updatedAt: Date.now(),
   },
@@ -15,7 +15,7 @@ export const mockedUsers: User[] = [
     id: uuidv4(),
     login: 'user2-login',
     password: 'user2-password',
-    version: 0, // integer number, increments on update
+    version: 1, // integer number, increments on update
     createdAt: Date.now(), // timestamp of creation
     updatedAt: Date.now(),
   },
@@ -23,7 +23,7 @@ export const mockedUsers: User[] = [
     id: uuidv4(),
     login: 'user3-login',
     password: 'user3-password',
-    version: 0, // integer number, increments on update
+    version: 1, // integer number, increments on update
     createdAt: Date.now(), // timestamp of creation
     updatedAt: Date.now(),
   },

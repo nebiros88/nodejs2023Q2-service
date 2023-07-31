@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
 import { db } from '../database/database';
-import { User } from 'src/types';
-import { create } from 'domain';
-import { CreateUserDto } from './dto';
+import { User, UserResponse } from 'src/types';
+import { CreateUserDto, UpdatePasswordDto } from './dto';
+import { REQUEST_ERRORS } from '../constants';
 
 @Injectable({})
 export class UserService {
-  getUsers(): User[] {
+  getUsers(): UserResponse[] {
     const users = db.user.map((user) => {
       const tmpUser = { ...user };
       delete tmpUser.password;
@@ -24,19 +24,19 @@ export class UserService {
     return user;
   }
 
-  createUser(user: CreateUserDto): User | void {
+  createUser(user: CreateUserDto): UserResponse | void {
     const { login, password } = user;
     const isLoginNotUniq = db.user.some((user) => user.login === login);
 
     if (isLoginNotUniq) {
-      throw new Error('User with this login already exists!');
+      throw new Error(REQUEST_ERRORS.USER_EXISTS_LOGIN);
     }
 
     const newUser: User = {
       id: uuidv4(),
       login: login,
       password: password,
-      version: 0,
+      version: 1,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
@@ -45,5 +45,42 @@ export class UserService {
     delete newUser.password;
 
     return newUser;
+  }
+
+  updatePassword(body: UpdatePasswordDto, id: string): UserResponse | void {
+    let user = db.user.find((user) => user.id === id);
+
+    if (!user) {
+      throw new Error(REQUEST_ERRORS.NO_USER_WITH_PROVIDED_ID);
+    }
+
+    const isWrongPassword = user.password !== body.oldPassword;
+
+    if (isWrongPassword) {
+      throw new Error(REQUEST_ERRORS.USER_WRONG_PASSWORD);
+    }
+
+    db.user.map((el) => {
+      if (el.id === id) {
+        el.password = body.newPassword;
+        el.version++;
+        el.updatedAt = Date.now();
+
+        user = { ...el };
+        delete user.password;
+      }
+    });
+    return { ...user };
+  }
+
+  deleteUser(id: string): void {
+    const user = db.user.find((user) => user.id === id);
+
+    if (!user) {
+      throw new Error(REQUEST_ERRORS.NO_USER_WITH_PROVIDED_ID);
+    }
+
+    db.user = db.user.filter((user) => user.id !== id);
+    return;
   }
 }

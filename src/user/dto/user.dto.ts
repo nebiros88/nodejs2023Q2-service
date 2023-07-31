@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsUUID } from 'class-validator';
 
-export class FindByOneParam {
+export class UserIdDto {
   @IsUUID('4')
   id: string;
 }
@@ -11,4 +11,12 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   password: string;
+}
+
+export class UpdatePasswordDto {
+  @IsNotEmpty()
+  oldPassword: string;
+
+  @IsNotEmpty()
+  newPassword: string;
 }
