@@ -12,5 +12,5 @@ export const db: DBType = {
   artist: [...mockedArtists],
   track: [...mockedTracks],
   album: [...mockedAlbums],
-  favorites: [...mockedFavorites],
+  favorites: { ...mockedFavorites },
 };

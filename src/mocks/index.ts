@@ -101,10 +101,8 @@ export const mockedAlbums: Album[] = [
   },
 ];
 
-export const mockedFavorites: Favorites[] = [
-  {
-    artists: [mockedArtists[0].id, mockedArtists[1].id],
-    albums: [mockedAlbums[0].id],
-    tracks: [mockedTracks[0].id, mockedTracks[1].id],
-  },
-];
+export const mockedFavorites: Favorites = {
+  artists: [mockedArtists[0].id, mockedArtists[1].id],
+  albums: [mockedAlbums[0].id],
+  tracks: [mockedTracks[0].id, mockedTracks[1].id],
+};

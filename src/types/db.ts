@@ -9,5 +9,5 @@ export type DBType = {
   artist: Artist[];
   track: Track[];
   album: Album[];
-  favorites: Favorites[];
+  favorites: Favorites;
 };
