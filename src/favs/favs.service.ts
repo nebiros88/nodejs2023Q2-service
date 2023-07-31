@@ -52,4 +52,25 @@ export class FavsService {
 
     return track;
   }
+
+  addFavoriteAlbum(id: string) {
+    const album = this.albumService.getAlbumById(id);
+
+    if (!album) throw new Error(REQUEST_ERRORS.ALBUM.NO_ALBUM_BY_ID);
+
+    db.favorites.albums.push(album.id);
+
+    return album;
+  }
+
+  deleteAlbumFromFavs(id: string) {
+    const album = this.albumService.getAlbumById(id);
+
+    if (!album) throw new Error(REQUEST_ERRORS.ALBUM.NO_ALBUM_BY_ID);
+
+    const isAlbumInFavs = db.favorites.albums.find((el) => (el = id));
+    if (!isAlbumInFavs) throw new Error(REQUEST_ERRORS.FAVS.NO_ALBUM_IN_FAVS);
+
+    db.favorites.albums = db.favorites.albums.filter((el) => el !== id);
+  }
 }

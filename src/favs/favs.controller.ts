@@ -15,6 +15,7 @@ import { ArtistService } from 'src/artist/artist.service';
 import { AlbumService } from 'src/album/album.service';
 import { TrackService } from 'src/track/track.service';
 import { TrackIdDto } from 'src/track/dto';
+import { AlbumIdDto } from 'src/album/dto';
 
 @Controller('favs')
 export class FavsController {
@@ -34,6 +35,25 @@ export class FavsController {
   addFavoriteTrack(@Param() { id }: TrackIdDto) {
     try {
       return this.favsService.addFavoriteTrack(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Post('/album/:id')
+  addFavoriteAlbum(@Param() { id }: AlbumIdDto) {
+    try {
+      return this.favsService.addFavoriteAlbum(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Delete('/album/:id')
+  @HttpCode(204)
+  deleteAlbumFromFavs(@Param() { id }: AlbumIdDto) {
+    try {
+      return this.favsService.deleteAlbumFromFavs(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }

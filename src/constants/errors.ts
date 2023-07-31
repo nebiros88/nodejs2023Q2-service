@@ -13,4 +13,8 @@ export const REQUEST_ERRORS = {
   ALBUM: {
     NO_ALBUM_BY_ID: 'The album with provided id does not exist!',
   },
+  FAVS: {
+    NO_ALBUM_IN_FAVS:
+      'The album with provided id does not incleded in favorites!',
+  },
 };
