@@ -1,6 +1,7 @@
 import { Body, Inject, Injectable, Post } from '@nestjs/common';
 import { AlbumService } from 'src/album/album.service';
 import { ArtistService } from 'src/artist/artist.service';
+import { REQUEST_ERRORS } from 'src/constants';
 import { db } from 'src/database/database';
 import { TrackService } from 'src/track/track.service';
 import { Album, Artist, FavoritesResponse, Track } from 'src/types';
@@ -40,5 +41,15 @@ export class FavsService {
     });
 
     return response;
+  }
+
+  addFavoriteTrack(id: string) {
+    const track = this.trackService.getTrackById(id);
+
+    if (!track) throw new Error(REQUEST_ERRORS.TRACK.NO_TRACK_BY_ID);
+
+    db.favorites.tracks.push(track.id);
+
+    return track;
   }
 }
