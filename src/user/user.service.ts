@@ -5,9 +5,12 @@ import { db } from '../database/database';
 import { User, UserResponse } from 'src/types';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { REQUEST_ERRORS } from '../constants';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-@Injectable({})
+@Injectable()
 export class UserService {
+  // constructor(private prisma: PrismaService)
+
   getUsers(): UserResponse[] {
     const users = db.user.map((user) => {
       const tmpUser = { ...user };
