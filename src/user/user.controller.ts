@@ -19,14 +19,14 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  getUsers() {
-    return this.userService.getUsers();
+  async getUsers() {
+    return await this.userService.getUsers();
   }
 
   @Get(':id')
   async getUserById(@Param() { id }: UserIdDto) {
     try {
-      return this.userService.getUserById(id);
+      return await this.userService.getUserById(id);
     } catch (error) {
       throw new HttpException(
         REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID,
@@ -36,18 +36,18 @@ export class UserController {
   }
 
   @Post()
-  createUser(@Body() { login, password }: CreateUserDto) {
+  async createUser(@Body() { login, password }: CreateUserDto) {
     try {
-      return this.userService.createUser({ login, password });
+      return await this.userService.createUser({ login, password });
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
   @Put(':id')
-  updatePassword(@Body() body: UpdatePasswordDto, @Param() { id }: UserIdDto) {
+  async updatePassword(@Body() body: UpdatePasswordDto, @Param() { id }: UserIdDto) {
     try {
-      return this.userService.updatePassword(body, id);
+      return await this.userService.updatePassword(body, id);
     } catch (error) {
       const statusCode: HttpStatus =
         error.message === REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID
@@ -60,9 +60,9 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(204)
-  deleteUser(@Param() { id }: UserIdDto) {
+  async deleteUser(@Param() { id }: UserIdDto) {
     try {
-      return this.userService.deleteUser(id);
+      return await this.userService.deleteUser(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }

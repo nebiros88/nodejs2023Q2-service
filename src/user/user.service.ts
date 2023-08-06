@@ -9,49 +9,77 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  // constructor(private prisma: PrismaService)
+  constructor(private prisma: PrismaService) {}
 
-  getUsers(): UserResponse[] {
-    const users = db.user.map((user) => {
-      const tmpUser = { ...user };
-      delete tmpUser.password;
-      return tmpUser;
-    });
-    return users;
+  async getUsers() {
+    // const users = db.user.map((user) => {
+    //   const tmpUser = { ...user };
+    //   delete tmpUser.password;
+    //   return tmpUser;
+    // });
+    let users = await this.prisma.user.findMany();
+    const result = users.map(user => {
+      const tempUser = { ...user};
+      delete tempUser.password;
+      return tempUser;
+    })
+    return result;
   }
 
-  getUserById(id: string): User | void {
-    const user = db.user.find((user) => user.id === id);
+  async getUserById(id: string) {
+    // const user = db.user.find((user) => user.id === id);
+    // if (!user) throw new Error();
+    // delete user.password;
+    const user = await this.prisma.user.findUnique({ where: { id }});
     if (!user) throw new Error();
     delete user.password;
     return user;
   }
 
-  createUser(user: CreateUserDto): UserResponse | void {
+  async createUser(user: CreateUserDto): Promise<void | UserResponse> {
     const { login, password } = user;
-    const isLoginNotUniq = db.user.some((user) => user.login === login);
+    //const isLoginNotUniq = db.user.some((user) => user.login === login);
 
-    if (isLoginNotUniq) {
+    const userByLogin = await this.prisma.user.findMany({ where: {login}});
+
+    if (!userByLogin) {
       throw new Error(REQUEST_ERRORS.USER.USER_EXISTS_LOGIN);
     }
+
+    const currentTime = Date.now();
 
     const newUser: User = {
       id: uuidv4(),
       login: login,
       password: password,
       version: 1,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      createdAt: currentTime,
+      updatedAt: currentTime,
     };
-    db.user.push({ ...newUser });
+    // db.user.push({ ...newUser });
 
-    delete newUser.password;
+    const data = await this.prisma.user.create({
+      data: {
+        ...newUser,
+        createdAt: new Date(newUser.createdAt),
+        updatedAt: new Date(newUser.updatedAt),
+      }
+    })
 
-    return newUser;
+    const responseUser = {
+      ...data,
+      createdAt: data.createdAt.getTime(),
+      updatedAt: data.updatedAt.getTime(),
+    }
+
+    delete responseUser.password;
+
+    return responseUser;
   }
 
-  updatePassword(body: UpdatePasswordDto, id: string): UserResponse | void {
-    let user = db.user.find((user) => user.id === id);
+  async updatePassword(body: UpdatePasswordDto, id: string): Promise<UserResponse | void> {
+    // let user = db.user.find((user) => user.id === id);
+    let user = await this.prisma.user.findUnique({ where: { id }});
 
     if (!user) {
       throw new Error(REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID);
@@ -63,27 +91,52 @@ export class UserService {
       throw new Error(REQUEST_ERRORS.USER.USER_WRONG_PASSWORD);
     }
 
-    db.user.map((el) => {
-      if (el.id === id) {
-        el.password = body.newPassword;
-        el.version++;
-        el.updatedAt = Date.now();
+    const currentTime = Date.now();
 
-        user = { ...el };
-        delete user.password;
+    const updatedUser = {
+      ...user,
+      password: body.newPassword,
+      createdAt: user.createdAt.getTime(),
+      updatedAt: currentTime,
+    }
+    updatedUser.version++;
+
+    const prismaUser = await this.prisma.user.update({
+      where: { id },
+      data: {
+        ...updatedUser,
+        createdAt: new Date(updatedUser.createdAt),
+        updatedAt: new Date(updatedUser.updatedAt),
       }
-    });
-    return { ...user };
+    })
+
+    // db.user.map((el) => {
+    //   if (el.id === id) {
+    //     el.password = body.newPassword;
+    //     el.version++;
+    //     el.updatedAt = Date.now();
+
+    //     user = { ...el };
+    //     delete user.password;
+    //   }
+    // });
+
+    delete updatedUser.password;
+
+    return updatedUser;
   }
 
-  deleteUser(id: string): void {
-    const user = db.user.find((user) => user.id === id);
+  async deleteUser(id: string): Promise<void> {
+    // const user = db.user.find((user) => user.id === id);
+    const user = await this.prisma.user.findUnique({ where: { id }});
 
     if (!user) {
       throw new Error(REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID);
     }
 
-    db.user = db.user.filter((user) => user.id !== id);
+    // db.user = db.user.filter((user) => user.id !== id);
+
+    await this.prisma.user.delete({ where: {id}});
     return;
   }
 }

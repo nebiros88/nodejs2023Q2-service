@@ -3,15 +3,15 @@ version: "3"
 services:
   db:
     container_name: db
-    build: 
-      context: .
-      dockerfile: docker/db/Dockerfile
+    build: ./database
+    restart: always  
     env-file: .env  
     ports: 
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     networks:
     - node-api-service
 
