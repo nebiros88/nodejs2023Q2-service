@@ -8,14 +8,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable({})
 export class ArtistService {
-  constructor(private prisma: PrismaService) {};
+  constructor(private prisma: PrismaService) {}
 
   async getArtists(): Promise<Artist[]> {
     return await this.prisma.artist.findMany();
   }
 
   async getArtistById(id: string): Promise<Artist | void> {
-    const artist = await this.prisma.artist.findUnique({ where: { id }});
+    const artist = await this.prisma.artist.findUnique({ where: { id } });
     if (!artist) throw new Error(REQUEST_ERRORS.ARTIST.NO_ARTIST_BY_ID);
     return artist;
   }
@@ -30,15 +30,17 @@ export class ArtistService {
 
     const resultArtist = await this.prisma.artist.create({
       data: {
-        ...newArtist
-      }
+        ...newArtist,
+      },
     });
 
     return resultArtist;
   }
 
   async updateArtist(artist: ArtistDto, id: string): Promise<Artist | void> {
-    const isArtistExist = await this.prisma.artist.findUnique({ where: { id }});
+    const isArtistExist = await this.prisma.artist.findUnique({
+      where: { id },
+    });
 
     if (!isArtistExist) {
       throw new Error(REQUEST_ERRORS.ARTIST.NO_ARTIST_BY_ID);
@@ -50,33 +52,20 @@ export class ArtistService {
       where: { id },
       data: {
         name,
-        grammy
-      }
+        grammy,
+      },
     });
     return updatedArtist;
   }
 
   async deleteArtist(id: string): Promise<void> {
-    const artist = await this.prisma.artist.findUnique({ where: { id }});
+    const artist = await this.prisma.artist.findUnique({ where: { id } });
 
     if (!artist) {
       throw new Error(REQUEST_ERRORS.ARTIST.NO_ARTIST_BY_ID);
     }
 
-    await this.prisma.artist.delete({ where: { id }});
-
-    // db.track.map((track, index) => {
-    //   if (track.artistId === id) {
-    //     db.track[index].artistId = null;
-    //   }
-    // });
-
-    // db.album.map((album, index) => {
-    //   if (album.artistId === id) {
-    //     db.album[index].artistId = null;
-    //   }
-    // });
-
+    await this.prisma.artist.delete({ where: { id } });
     return;
   }
 }

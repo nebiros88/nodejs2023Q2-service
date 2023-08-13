@@ -12,16 +12,16 @@ export class UserService {
 
   async getUsers() {
     let users = await this.prisma.user.findMany();
-    const result = users.map(user => {
-      const tempUser = { ...user};
+    const result = users.map((user) => {
+      const tempUser = { ...user };
       delete tempUser.password;
       return tempUser;
-    })
+    });
     return result;
   }
 
   async getUserById(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id }});
+    const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new Error();
     delete user.password;
     return user;
@@ -30,7 +30,9 @@ export class UserService {
   async createUser(user: CreateUserDto): Promise<void | UserResponse> {
     const { login, password } = user;
 
-    const matchUserByLogin = await this.prisma.user.findFirst({ where: { login }});
+    const matchUserByLogin = await this.prisma.user.findFirst({
+      where: { login },
+    });
 
     if (matchUserByLogin) {
       throw new Error(REQUEST_ERRORS.USER.USER_EXISTS_LOGIN);
@@ -52,22 +54,25 @@ export class UserService {
         ...newUser,
         createdAt: new Date(newUser.createdAt),
         updatedAt: new Date(newUser.updatedAt),
-      }
-    })
+      },
+    });
 
     const responseUser = {
       ...data,
       createdAt: data.createdAt.getTime(),
       updatedAt: data.updatedAt.getTime(),
-    }
+    };
 
     delete responseUser.password;
 
     return responseUser;
   }
 
-  async updatePassword(body: UpdatePasswordDto, id: string): Promise<UserResponse | void> {
-    let user = await this.prisma.user.findUnique({ where: { id }});
+  async updatePassword(
+    body: UpdatePasswordDto,
+    id: string,
+  ): Promise<UserResponse | void> {
+    let user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       throw new Error(REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID);
@@ -86,7 +91,7 @@ export class UserService {
       password: body.newPassword,
       createdAt: user.createdAt.getTime(),
       updatedAt: currentTime,
-    }
+    };
     updatedUser.version++;
 
     const prismaUser = await this.prisma.user.update({
@@ -95,21 +100,21 @@ export class UserService {
         ...updatedUser,
         createdAt: new Date(updatedUser.createdAt),
         updatedAt: new Date(updatedUser.updatedAt),
-      }
-    })
+      },
+    });
     delete updatedUser.password;
 
     return updatedUser;
   }
 
   async deleteUser(id: string): Promise<void> {
-    const user = await this.prisma.user.findUnique({ where: { id }});
+    const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       throw new Error(REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID);
     }
 
-    await this.prisma.user.delete({ where: {id}});
+    await this.prisma.user.delete({ where: { id } });
     return;
   }
 }

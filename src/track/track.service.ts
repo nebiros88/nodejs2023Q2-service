@@ -8,14 +8,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable({})
 export class TrackService {
-  constructor(private prisma: PrismaService) {};
+  constructor(private prisma: PrismaService) {}
 
   async getTracks(): Promise<Track[]> {
     return await this.prisma.track.findMany();
   }
 
   async getTrackById(id: string): Promise<Track | void> {
-    const track = await this.prisma.track.findUnique({ where: { id }});
+    const track = await this.prisma.track.findUnique({ where: { id } });
     if (!track) throw new Error(REQUEST_ERRORS.TRACK.NO_TRACK_BY_ID);
     return track;
   }
@@ -27,14 +27,14 @@ export class TrackService {
       data: {
         ...newTrack,
         id: trackId,
-      }
-    })
+      },
+    });
 
     return createTrackResult;
   }
 
   async updateTrack(track: TrackDto, id: string): Promise<Track | void> {
-    const isTrackExist = await this.prisma.track.findUnique({ where: { id }});
+    const isTrackExist = await this.prisma.track.findUnique({ where: { id } });
 
     if (!isTrackExist) {
       throw new Error(REQUEST_ERRORS.TRACK.NO_TRACK_BY_ID);
@@ -49,13 +49,13 @@ export class TrackService {
   }
 
   async deleteTrack(id: string): Promise<void> {
-    const track = await this.prisma.track.findUnique({ where: { id }});
+    const track = await this.prisma.track.findUnique({ where: { id } });
 
     if (!track) {
       throw new Error(REQUEST_ERRORS.TRACK.NO_TRACK_BY_ID);
     }
 
-    await this.prisma.track.delete({ where: { id }});
+    await this.prisma.track.delete({ where: { id } });
     return;
   }
 }

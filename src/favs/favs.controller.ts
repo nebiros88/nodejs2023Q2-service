@@ -17,9 +17,7 @@ import { ArtistIdDto } from 'src/artist/dto';
 
 @Controller('favs')
 export class FavsController {
-  constructor(
-    private favsService: FavsService,
-  ) {}
+  constructor(private favsService: FavsService) {}
 
   @Get()
   async getFavorites() {

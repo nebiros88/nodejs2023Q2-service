@@ -8,14 +8,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable({})
 export class AlbumService {
-  constructor(private prisma: PrismaService) {};
-  
+  constructor(private prisma: PrismaService) {}
+
   async getAlbums(): Promise<Album[]> {
     return await this.prisma.album.findMany();
   }
 
   async getAlbumById(id: string): Promise<Album | void> {
-    const album = await this.prisma.album.findUnique({ where: { id }});
+    const album = await this.prisma.album.findUnique({ where: { id } });
     if (!album) throw new Error(REQUEST_ERRORS.ALBUM.NO_ALBUM_BY_ID);
     return album;
   }
@@ -31,15 +31,15 @@ export class AlbumService {
 
     const resultAlbum = await this.prisma.album.create({
       data: {
-        ...newAlbum
-      }
-    })
+        ...newAlbum,
+      },
+    });
 
     return resultAlbum;
   }
 
   async updateAlbum(album: AlbumDto, id: string): Promise<Album | void> {
-    const isAlbumExist = await this.prisma.album.findUnique({ where: { id }});
+    const isAlbumExist = await this.prisma.album.findUnique({ where: { id } });
 
     if (!isAlbumExist) {
       throw new Error(REQUEST_ERRORS.ALBUM.NO_ALBUM_BY_ID);
@@ -52,21 +52,21 @@ export class AlbumService {
       data: {
         name,
         year,
-        artistId
-      }
+        artistId,
+      },
     });
 
     return updatedAlbum;
   }
 
   async deleteAlbum(id: string): Promise<void> {
-    const album = await this.prisma.album.findUnique({ where: { id }});
+    const album = await this.prisma.album.findUnique({ where: { id } });
 
     if (!album) {
       throw new Error(REQUEST_ERRORS.ALBUM.NO_ALBUM_BY_ID);
     }
 
-    await this.prisma.album.delete({ where: { id }});
+    await this.prisma.album.delete({ where: { id } });
     return;
   }
 }

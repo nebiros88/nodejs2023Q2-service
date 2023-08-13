@@ -45,7 +45,10 @@ export class UserController {
   }
 
   @Put(':id')
-  async updatePassword(@Body() body: UpdatePasswordDto, @Param() { id }: UserIdDto) {
+  async updatePassword(
+    @Body() body: UpdatePasswordDto,
+    @Param() { id }: UserIdDto,
+  ) {
     try {
       return await this.userService.updatePassword(body, id);
     } catch (error) {
