@@ -1,7 +1,9 @@
-FROM node:18.16
+FROM node:18-alpine
 
-WORKDIR /app
-COPY ../../package*.json ./
-RUN npm install
-COPY ../../ .
-CMD ["npm", "run", "start"]
+WORKDIR /server
+COPY package*.json ./
+COPY tsconfig*.json ./
+RUN npm install && npm cache clean --force
+COPY  . /server
+EXPOSE 4000
+CMD ["npm", "run", "start:migrate:dev"]

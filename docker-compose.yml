@@ -1,27 +1,40 @@
-version: "3"
+version: '3'
 
 services:
   db:
     container_name: db
     build: ./database
-    restart: always  
-    env-file: .env  
-    ports: 
+    restart: always
+    ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/data
+      - postgres_logs:/logs
     networks:
-    - node-api-service
+      - node-api-service
 
   server:
     container_name: server
     build:
       context: .
-      dockerfile: docker/back/Dockerfile
-    env-file: .env
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./src:/server/src
+    depends_on:
+      - db
     networks:
-    - node-api-service  
+      - node-api-service
+
+volumes:
+  postgres_data:
+  postgres_logs:
+
 networks:
-  node-api-service:    
+  node-api-service:
+    driver: bridge
