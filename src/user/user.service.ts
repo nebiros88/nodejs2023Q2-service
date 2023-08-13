@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
-import { db } from '../database/database';
 import { User, UserResponse } from 'src/types';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { REQUEST_ERRORS } from '../constants';
@@ -32,8 +31,6 @@ export class UserService {
     const { login, password } = user;
 
     const matchUserByLogin = await this.prisma.user.findFirst({ where: { login }});
-
-    console.log('USER - ', matchUserByLogin);
 
     if (matchUserByLogin) {
       throw new Error(REQUEST_ERRORS.USER.USER_EXISTS_LOGIN);

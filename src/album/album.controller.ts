@@ -18,28 +18,28 @@ export class AlbumController {
   constructor(private albumService: AlbumService) {}
 
   @Get()
-  getAlbums() {
-    return this.albumService.getAlbums();
+  async getAlbums() {
+    return await this.albumService.getAlbums();
   }
 
   @Get(':id')
-  getAlbumById(@Param() { id }: AlbumIdDto) {
+  async getAlbumById(@Param() { id }: AlbumIdDto) {
     try {
-      return this.albumService.getAlbumById(id);
+      return await this.albumService.getAlbumById(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
   @Post()
-  createAlbum(@Body() album: AlbumDto) {
-    return this.albumService.createAlbum(album);
+  async createAlbum(@Body() album: AlbumDto) {
+    return await this.albumService.createAlbum(album);
   }
 
   @Put(':id')
-  updateAlbum(@Body() album: AlbumDto, @Param() { id }: AlbumIdDto) {
+  async updateAlbum(@Body() album: AlbumDto, @Param() { id }: AlbumIdDto) {
     try {
-      return this.albumService.updateAlbum(album, id);
+      return await this.albumService.updateAlbum(album, id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
@@ -47,9 +47,9 @@ export class AlbumController {
 
   @Delete(':id')
   @HttpCode(204)
-  deleteAlbum(@Param() { id }: AlbumIdDto) {
+  async deleteAlbum(@Param() { id }: AlbumIdDto) {
     try {
-      return this.albumService.deleteAlbum(id);
+      return await this.albumService.deleteAlbum(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }

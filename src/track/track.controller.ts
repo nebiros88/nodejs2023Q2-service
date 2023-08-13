@@ -18,28 +18,28 @@ export class TrackController {
   constructor(private trackService: TrackService) {}
 
   @Get()
-  getTracks() {
-    return this.trackService.getTracks();
+  async getTracks() {
+    return await this.trackService.getTracks();
   }
 
   @Get(':id')
-  getTrackById(@Param() { id }: TrackIdDto) {
+  async getTrackById(@Param() { id }: TrackIdDto) {
     try {
-      return this.trackService.getTrackById(id);
+      return await this.trackService.getTrackById(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
   @Post()
-  createTrack(@Body() body: TrackDto) {
-    return this.trackService.createTrack(body);
+  async createTrack(@Body() body: TrackDto) {
+    return await this.trackService.createTrack(body);
   }
 
   @Put(':id')
-  updateTrack(@Body() body: TrackDto, @Param() { id }: TrackIdDto) {
+  async updateTrack(@Body() body: TrackDto, @Param() { id }: TrackIdDto) {
     try {
-      return this.trackService.updateTrack(body, id);
+      return await this.trackService.updateTrack(body, id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
@@ -47,9 +47,9 @@ export class TrackController {
 
   @Delete(':id')
   @HttpCode(204)
-  deleteTrack(@Param() { id }: TrackIdDto) {
+  async deleteTrack(@Param() { id }: TrackIdDto) {
     try {
-      return this.trackService.deleteTrack(id);
+      return await this.trackService.deleteTrack(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }

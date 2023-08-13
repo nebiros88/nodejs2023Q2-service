@@ -18,28 +18,28 @@ export class ArtistController {
   constructor(private artistService: ArtistService) {}
 
   @Get()
-  getArtists() {
-    return this.artistService.getArtists();
+  async getArtists() {
+    return await this.artistService.getArtists();
   }
 
   @Get(':id')
-  getArtistById(@Param() { id }: ArtistIdDto) {
+  async getArtistById(@Param() { id }: ArtistIdDto) {
     try {
-      return this.artistService.getArtistById(id);
+      return await this.artistService.getArtistById(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
   @Post()
-  createArtist(@Body() artist: ArtistDto) {
-    return this.artistService.createArtist(artist);
+  async createArtist(@Body() artist: ArtistDto) {
+    return await this.artistService.createArtist(artist);
   }
 
   @Put(':id')
-  updateArtist(@Body() artist: ArtistDto, @Param() { id }: ArtistIdDto) {
+  async updateArtist(@Body() artist: ArtistDto, @Param() { id }: ArtistIdDto) {
     try {
-      return this.artistService.updateArtist(artist, id);
+      return await this.artistService.updateArtist(artist, id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }
@@ -47,9 +47,9 @@ export class ArtistController {
 
   @Delete(':id')
   @HttpCode(204)
-  deleteArtist(@Param() { id }: ArtistIdDto) {
+  async deleteArtist(@Param() { id }: ArtistIdDto) {
     try {
-      return this.artistService.deleteArtist(id);
+      return await this.artistService.deleteArtist(id);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.NOT_FOUND);
     }

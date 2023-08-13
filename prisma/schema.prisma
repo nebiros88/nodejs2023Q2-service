@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -16,22 +13,16 @@ model User {
   password String
   version Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
-  favorites Favorites[]
-  
-  @@map("users")
+  updatedAt DateTime @default(now())
 }
 
 model Artist {
   id String @id @default(uuid())
   name String
   grammy Boolean
-
   albums Album[]
   tracks Track[]
-  favorites Favorites[]
-
-  @@map("artists")
+  favorites FavoritesToArtists?
 }
 
 model Album {
@@ -39,12 +30,9 @@ model Album {
   name String
   year Int
   artistId String?
-
-  arttist Artist? @relation(fields: [artistId], references: [id])
+  arttist Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull)
   tracks Track[]
-  favorites Favorites[]
-
-  @@map("albums")
+  favorites FavoritesToAlbums?
 }
 
 model Track {
@@ -53,20 +41,22 @@ model Track {
   artistId String?
   albumId String?
   duration Int
-
-  artist Artist? @relation(fields: [artistId], references: [id])
-  album Album? @relation(fields: [albumId], references: [id])
-  favorites Favorites[]
-
-  @@map("tracks")
+  artist Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  album Album? @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  favorites FavoritesToTracks?
 }
 
-model Favorites {
-  id String @id @default(uuid())
-  artists Artist[] 
-  albums Album[]
-  tracks Track[]
+model FavoritesToArtists {
+  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  artistId String @unique
+}
 
-  user User @relation(fields: [userId], references: [id])
-  userId String
+model FavoritesToAlbums {
+  album Album @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId String @unique
+}
+
+model FavoritesToTracks {
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  trackId String @unique
 }

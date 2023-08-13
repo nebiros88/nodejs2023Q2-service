@@ -1,24 +1,26 @@
-import { Body, Injectable, Post } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
 import { REQUEST_ERRORS } from 'src/constants';
-import { db } from 'src/database/database';
 import { Album } from 'src/types';
 import { AlbumDto } from './dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable({})
 export class AlbumService {
-  getAlbums(): Album[] {
-    return db.album;
+  constructor(private prisma: PrismaService) {};
+  
+  async getAlbums(): Promise<Album[]> {
+    return await this.prisma.album.findMany();
   }
 
-  getAlbumById(id: string): Album | void {
-    const album = db.album.find((album) => album.id === id);
+  async getAlbumById(id: string): Promise<Album | void> {
+    const album = await this.prisma.album.findUnique({ where: { id }});
     if (!album) throw new Error(REQUEST_ERRORS.ALBUM.NO_ALBUM_BY_ID);
     return album;
   }
 
-  createAlbum(album: AlbumDto): Album | void {
+  async createAlbum(album: AlbumDto): Promise<Album | void> {
     const { name, year, artistId = null } = album;
     const newAlbum: Album = {
       id: uuidv4(),
@@ -27,13 +29,17 @@ export class AlbumService {
       artistId: artistId,
     };
 
-    db.album.push(newAlbum);
+    const resultAlbum = await this.prisma.album.create({
+      data: {
+        ...newAlbum
+      }
+    })
 
-    return newAlbum;
+    return resultAlbum;
   }
 
-  updateAlbum(album: AlbumDto, id: string): Album | void {
-    const isAlbumExist = db.album.find((el) => el.id === id);
+  async updateAlbum(album: AlbumDto, id: string): Promise<Album | void> {
+    const isAlbumExist = await this.prisma.album.findUnique({ where: { id }});
 
     if (!isAlbumExist) {
       throw new Error(REQUEST_ERRORS.ALBUM.NO_ALBUM_BY_ID);
@@ -41,31 +47,26 @@ export class AlbumService {
 
     const { name, year, artistId = null } = album;
 
-    const tempAlbum: Album = {
-      id: id,
-      name: name,
-      year: year,
-      artistId: artistId,
-    };
-
-    db.album.map((el) => {
-      if (el.id === id) {
-        el.name = tempAlbum.name;
-        el.year = tempAlbum.year;
-        el.artistId = tempAlbum.artistId;
+    const updatedAlbum = await this.prisma.album.update({
+      where: { id },
+      data: {
+        name,
+        year,
+        artistId
       }
     });
 
-    return isAlbumExist;
+    return updatedAlbum;
   }
 
-  deleteAlbum(id: string): void {
-    const album = db.album.find((el) => el.id === id);
+  async deleteAlbum(id: string): Promise<void> {
+    const album = await this.prisma.album.findUnique({ where: { id }});
 
     if (!album) {
       throw new Error(REQUEST_ERRORS.ALBUM.NO_ALBUM_BY_ID);
     }
 
-    db.album = db.album.filter((el) => el.id !== id);
+    await this.prisma.album.delete({ where: { id }});
+    return;
   }
 }
