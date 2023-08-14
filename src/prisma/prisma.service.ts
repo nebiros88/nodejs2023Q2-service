@@ -3,8 +3,6 @@ import { PrismaClient } from '@prisma/client';
 
 const DATABASE_URL = process.env.DATABASE_URL;
 
-console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -', DATABASE_URL);
-
 @Injectable()
 export class PrismaService extends PrismaClient {
   constructor() {
@@ -12,7 +10,6 @@ export class PrismaService extends PrismaClient {
       datasources: {
         db: {
           url: DATABASE_URL,
-          // url: "file:./database.db"
         },
       },
     });
