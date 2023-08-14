@@ -9,7 +9,7 @@ git clone https://github.com/nebiros88/nodejs2023Q2-service.git
 
 ## How to install
 
-Checkout to develop branch
+Checkout to ```home_library_service_part_2``` branch
 
 ## Installing NPM modules
 
@@ -23,9 +23,20 @@ npm install
 npm run start
 ```
 
+## Running application in containers with docker
+
+- run ```docker compose build```
+- run ```docker compose up```
+- two services should be started after two previous commands the database server and the server for application
+
+## Link to docker images  
+
+1. [Database](https://hub.docker.com/r/siarheikorbut/nodejs2023q2-service-db) to pull this image run ```docker pull siarheikorbut/nodejs2023q2-service-db``` 
+2. [Server](https://hub.docker.com/r/siarheikorbut/nodejs2023q2-service-server) to pull this image run ```docker pull siarheikorbut/nodejs2023q2-service-server``` 
+
 ## Testing
 
-After application running open new terminal and enter:
+After application running with docker open new terminal and enter:
 
 To run all tests without authorization
 
