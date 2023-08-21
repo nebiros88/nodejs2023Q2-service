@@ -9,7 +9,7 @@ git clone https://github.com/nebiros88/nodejs2023Q2-service.git
 
 ## How to install
 
-Checkout to ```home_library_service_part_2``` branch
+Checkout to `home_library_service_part_2` branch
 
 ## Installing NPM modules
 
@@ -25,14 +25,14 @@ npm run start
 
 ## Running application in containers with docker
 
-- run ```docker compose build```
-- run ```docker compose up```
+- run `docker compose build`
+- run `docker compose up`
 - two services should be started after two previous commands the database server and the server for application
 
-## Link to docker images  
+## Link to docker images
 
-1. [Database](https://hub.docker.com/r/siarheikorbut/nodejs2023q2-service-db) to pull this image run ```docker pull siarheikorbut/nodejs2023q2-service-db``` 
-2. [Server](https://hub.docker.com/r/siarheikorbut/nodejs2023q2-service-server) to pull this image run ```docker pull siarheikorbut/nodejs2023q2-service-server``` 
+1. [Database](https://hub.docker.com/r/siarheikorbut/nodejs2023q2-service-db) to pull this image run `docker pull siarheikorbut/nodejs2023q2-service-db`
+2. [Server](https://hub.docker.com/r/siarheikorbut/nodejs2023q2-service-server) to pull this image run `docker pull siarheikorbut/nodejs2023q2-service-server`
 
 ## Testing
 
@@ -53,6 +53,16 @@ npm run lint
 ```
 npm run format
 ```
+
+### Implemented custom logger
+
+- to watch server logs after server starting go to:
+
+  - for all logs go to `./logs` folder from the root project folder
+  - for all errors got to `./errors` folder form the root project folder
+
+- to set the size for log file use `LOGGER_FILE_SIZE` variable from the `.env` file
+- to specify logging level for server custom logger use `LOGGER_LOG_LEVEL` variable from the `.env` file
 
 ### How to use
 
