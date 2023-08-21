@@ -21,4 +21,5 @@ export const REQUEST_ERRORS = {
     NO_ARTIST_IN_FAVS:
       'The artist with provided id does not included in favorites!',
   },
+  INTERNAL_SERVER_ERROR: 'Internal Server Error',
 };
