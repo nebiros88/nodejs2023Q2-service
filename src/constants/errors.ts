@@ -21,5 +21,8 @@ export const REQUEST_ERRORS = {
     NO_ARTIST_IN_FAVS:
       'The artist with provided id does not included in favorites!',
   },
+  AUTH: {
+    NO_USER: 'No user with such login or password does not  match actual one',
+  },
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
 };

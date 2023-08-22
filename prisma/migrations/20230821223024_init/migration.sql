@@ -11,6 +11,12 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Tocken" (
+    "refreshTocken" TEXT NOT NULL,
+    "userId" TEXT NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "Artist" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -56,6 +62,9 @@ CREATE TABLE "FavoritesToTracks" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Tocken_userId_key" ON "Tocken"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "FavoritesToArtists_artistId_key" ON "FavoritesToArtists"("artistId");
 
 -- CreateIndex
@@ -63,6 +72,9 @@ CREATE UNIQUE INDEX "FavoritesToAlbums_albumId_key" ON "FavoritesToAlbums"("albu
 
 -- CreateIndex
 CREATE UNIQUE INDEX "FavoritesToTracks_trackId_key" ON "FavoritesToTracks"("trackId");
+
+-- AddForeignKey
+ALTER TABLE "Tocken" ADD CONSTRAINT "Tocken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Album" ADD CONSTRAINT "Album_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -6,11 +6,14 @@ import { CustomExceptionFilter } from './utils/custom-exception-filter';
 import { CustomLoggerService } from './logger/logger.service';
 import { LogLevels } from './constants';
 import { writeToFile } from './utils';
+import * as cookieParser from 'cookie-parser';
 
 const PORT = process.env.PORT || 4000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
 
   app.useLogger(new CustomLoggerService());
 

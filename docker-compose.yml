@@ -30,6 +30,7 @@ services:
       - db
     volumes:
       - .:/server
+      - /server/node_modules
     networks:
       - node-api-service
     tty: true

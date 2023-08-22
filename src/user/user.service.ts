@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from 'bcrypt';
 
 import { User, UserResponse } from 'src/types';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
@@ -27,7 +28,7 @@ export class UserService {
     return user;
   }
 
-  async createUser(user: CreateUserDto): Promise<void | UserResponse> {
+  async createUser(user: CreateUserDto) {
     const { login, password } = user;
 
     const matchUserByLogin = await this.prisma.user.findFirst({
@@ -39,11 +40,12 @@ export class UserService {
     }
 
     const currentTime = Date.now();
+    const hashPassword = await bcrypt.hash(password, 4);
 
     const newUser: User = {
       id: uuidv4(),
       login: login,
-      password: password,
+      password: hashPassword,
       version: 1,
       createdAt: currentTime,
       updatedAt: currentTime,
