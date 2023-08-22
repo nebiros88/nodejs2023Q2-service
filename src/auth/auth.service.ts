@@ -46,12 +46,12 @@ export class AuthService {
     };
 
     return {
-      accessTocken: this.jwtService.sign(pyaload, { expiresIn: '24h' }),
-      refreshTocken: this.jwtService.sign(pyaload, { expiresIn: '30d' }),
+      accessToken: this.jwtService.sign(pyaload, { expiresIn: '24h' }),
+      refreshToken: this.jwtService.sign(pyaload, { expiresIn: '30d' }),
     };
   }
 
-  async saveTocken(userId: string, refreshTocken: string) {
+  async saveTocken(userId: string, refreshToken: string) {
     const tockenData = await this.prisma.tocken.findUnique({
       where: { userId },
     });
@@ -59,7 +59,7 @@ export class AuthService {
     if (tockenData) {
       const updateTockenData = {
         userId: tockenData.userId,
-        refreshTocken,
+        refreshToken,
       };
 
       await this.prisma.tocken.update({
@@ -70,7 +70,7 @@ export class AuthService {
       tocken = tockenData;
     } else {
       tocken = await this.prisma.tocken.create({
-        data: { userId, refreshTocken },
+        data: { userId, refreshToken },
       });
     }
 
@@ -80,7 +80,7 @@ export class AuthService {
   async signUp({ login, password }: CreateUserDto) {
     const newUser = await this.usersService.createUser({ login, password });
     const tockenData = await this.generateToken(newUser);
-    this.saveTocken(newUser.id, tockenData.refreshTocken);
+    this.saveTocken(newUser.id, tockenData.refreshToken);
     return { user: newUser, ...tockenData };
   }
 
@@ -88,7 +88,7 @@ export class AuthService {
     const user = await this.validateUser({ login, password });
     const tocken = await this.generateToken(user);
 
-    await this.saveTocken(user.id, tocken.refreshTocken);
+    await this.saveTocken(user.id, tocken.refreshToken);
 
     return { ...tocken };
   }
@@ -98,7 +98,7 @@ export class AuthService {
       throw new HttpException('No refreshTocken!', HttpStatus.UNAUTHORIZED);
     }
     const refreshTokenInDataBase = await this.prisma.tocken.findFirst({
-      where: { refreshTocken: refreshTocken.refreshTocken },
+      where: { refreshToken: refreshTocken.refreshTocken },
     });
     if (!refreshTokenInDataBase) {
       throw new HttpException('No tocken found!', HttpStatus.FORBIDDEN);
@@ -107,7 +107,7 @@ export class AuthService {
       refreshTokenInDataBase.userId,
     );
     const tokenData = await this.generateToken(user);
-    this.saveTocken(user.id, tokenData.refreshTocken);
+    this.saveTocken(user.id, tokenData.refreshToken);
     return {
       ...tokenData,
     };

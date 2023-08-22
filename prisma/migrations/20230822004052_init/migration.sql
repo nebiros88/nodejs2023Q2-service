@@ -12,7 +12,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Tocken" (
-    "refreshTocken" TEXT NOT NULL,
+    "refreshToken" TEXT NOT NULL,
     "userId" TEXT NOT NULL
 );
 

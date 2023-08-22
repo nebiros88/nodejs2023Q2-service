@@ -24,11 +24,11 @@ export class AuthController {
   ) {
     try {
       const data = await this.authService.signUp({ login, password });
-      res.cookie('accessTocken', data.accessTocken, {
+      res.cookie('accessToken', data.accessToken, {
         maxAge: 1 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
-      res.cookie('refreshTocken', data.refreshTocken, {
+      res.cookie('refreshToken', data.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
@@ -45,16 +45,16 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      const tockenData = await this.authService.logIn({ login, password });
-      res.cookie('accessTocken', tockenData.accessTocken, {
+      const tokenData = await this.authService.logIn({ login, password });
+      res.cookie('accessToken', tokenData.accessToken, {
         maxAge: 1 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
-      res.cookie('refreshTocken', tockenData.refreshTocken, {
+      res.cookie('refreshToken', tokenData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
-      return tockenData;
+      return tokenData;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -68,11 +68,11 @@ export class AuthController {
     try {
       const refreshToken = req.cookies;
       const tokenData = await this.authService.refresh(refreshToken);
-      res.cookie('accessToken', tokenData.accessTocken, {
+      res.cookie('accessToken', tokenData.accessToken, {
         maxAge: 1 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
-      res.cookie('refreshToken', tokenData.refreshTocken, {
+      res.cookie('refreshToken', tokenData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });

@@ -26,6 +26,7 @@ export class UserController {
     return await this.userService.getUsers();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getUserById(@Param() { id }: UserIdDto) {
     try {
@@ -38,6 +39,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async createUser(@Body() { login, password }: CreateUserDto) {
     try {
@@ -47,6 +49,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async updatePassword(
     @Body() body: UpdatePasswordDto,
@@ -64,6 +67,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(204)
   async deleteUser(@Param() { id }: UserIdDto) {

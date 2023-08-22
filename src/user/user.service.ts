@@ -70,27 +70,35 @@ export class UserService {
     return responseUser;
   }
 
-  async updatePassword(
-    body: UpdatePasswordDto,
-    id: string,
-  ): Promise<UserResponse | void> {
+  async updatePassword(body: UpdatePasswordDto, id: string) {
     let user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       throw new Error(REQUEST_ERRORS.USER.NO_USER_WITH_PROVIDED_ID);
     }
+    console.log('1213', body.oldPassword, 222, user.password);
 
-    const isWrongPassword = user.password !== body.oldPassword;
+    const passwordEuqals = await bcrypt.compare(
+      body.oldPassword,
+      user.password,
+    );
 
-    if (isWrongPassword) {
+    if (!passwordEuqals) {
       throw new Error(REQUEST_ERRORS.USER.USER_WRONG_PASSWORD);
     }
 
+    // const isWrongPassword = user.password !== body.oldPassword;
+
+    // if (isWrongPassword) {
+    //   throw new Error(REQUEST_ERRORS.USER.USER_WRONG_PASSWORD);
+    // }
+
     const currentTime = Date.now();
+    const newPassHash = await bcrypt.hash(body.newPassword, 4);
 
     const updatedUser = {
       ...user,
-      password: body.newPassword,
+      password: newPassHash,
       createdAt: user.createdAt.getTime(),
       updatedAt: currentTime,
     };
@@ -110,6 +118,16 @@ export class UserService {
   }
 
   async deleteUser(id: string): Promise<void> {
+    const tockenUser = await this.prisma.tocken.findFirst({
+      where: { userId: id },
+    });
+
+    if (tockenUser) {
+      await this.prisma.tocken.delete({
+        where: { userId: tockenUser.userId },
+      });
+    }
+
     const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
